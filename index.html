@@ -1,114 +1,310 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ClarityRx</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ClarityRx — AI-assisted patient intake and triage">
+    <title>ClarityRx | Patient Intake</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header class="topbar">
-    <h1>ClarityRx</h1>
-    <div>
-      <button id="btnViewAll" class="btn small">View all patients</button>
-    </div>
-  </header>
-
-  <main id="main">
-    <section id="formView" class="card">
-      <h2>Patient Intake</h2>
-      <form id="intakeForm">
-        <label>
-          Name
-          <input name="name" id="name" required />
-        </label>
-        <label>
-          Age
-          <input name="age" id="age" type="number" min="0" required />
-        </label>
-        <label>
-          Gender
-          <select name="gender" id="gender">
-            <option value="">Prefer not to say</option>
-            <option>Female</option>
-            <option>Male</option>
-            <option>Other</option>
-          </select>
-        </label>
-        <label>
-          Phone
-          <input name="phone" id="phone" type="tel" />
-        </label>
-        <label>
-          Address
-          <input name="address" id="address" />
-        </label>
-        <label>
-          Symptoms (brief, describe main problems)
-          <textarea name="symptoms" id="symptoms" rows="4" required></textarea>
-        </label>
-
-        <div id="llmStatus" class="muted">AI status: idle</div>
-
-        <div class="row">
-          <button id="btnSubmit" type="submit" class="btn primary">Submit & Triage (AI)</button>
-          <button id="btnClear" type="button" class="btn">Clear</button>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true">+</div>
+            <div class="brand-copy">
+                <h1>Clarity<span>Rx</span></h1>
+                <p>Patient intake &amp; AI triage</p>
+            </div>
         </div>
-      </form>
 
-      <div id="override" class="card small hidden">
-        <h3>Manual override (or confirm)</h3>
-        <label>
-          Urgency
-          <select id="overrideUrgency">
-            <option value="red">Red — Emergency</option>
-            <option value="yellow">Yellow — Needs review</option>
-            <option value="green">Green — Routine</option>
-          </select>
-        </label>
-        <label>
-          Doctor / Specialty
-          <input id="overrideDoctor" />
-        </label>
-        <label>
-          AI notes (editable)
-          <textarea id="overrideNotes" rows="3"></textarea>
-        </label>
-        <div class="row">
-          <button id="btnSaveManual" class="btn primary">Save to Sheet</button>
-          <button id="btnCancelManual" class="btn">Cancel</button>
-        </div>
-      </div>
-    </section>
+        <button id="btnViewAll" class="btn btn-secondary btn-small" type="button">
+            View all patients
+        </button>
+    </header>
 
-    <section id="patientView" class="card hidden printable">
-      <button id="backFromPatient" class="btn small">← Back</button>
-      <div id="patientContent"></div>
-      <div class="row">
-        <button id="btnPrint" class="btn">Print</button>
-      </div>
-    </section>
+    <main id="main">
+        <!-- =====================================================
+             Patient Intake
+             ===================================================== -->
+        <section id="formView" class="page-section">
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">CLINICAL INTAKE</p>
+                    <h2>New patient assessment</h2>
+                    <p class="page-description">
+                        Enter the patient's basic information and symptoms.
+                        ClarityRx will assist with initial triage and specialty routing.
+                    </p>
+                </div>
 
-    <section id="listView" class="card hidden">
-      <button id="backFromList" class="btn small">← Back</button>
-      <h2>All patients</h2>
-      <div id="listContainer" class="tablewrap">
-        <table id="patientsTable">
-          <thead>
-            <tr>
-              <th>ID</th><th>Name</th><th>Age</th><th>Urgency</th><th>Doctor</th><th>Time</th><th>Action</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+                <div class="ai-badge">
+                    <span class="status-dot"></span>
+                    AI triage ready
+                </div>
+            </div>
 
-  <footer class="foot muted">
-    <small>Hackathon demo — client-first static app + Google Sheets backend</small>
-  </footer>
+            <div class="intake-layout">
+                <div class="card intake-card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Patient information</h3>
+                            <p>Basic details for the intake record.</p>
+                        </div>
+                        <span class="step-label">01</span>
+                    </div>
 
-  <script src="script.js"></script>
+                    <form id="intakeForm">
+                        <div class="form-grid">
+                            <label class="field">
+                                <span class="field-label">Name <span class="required">*</span></span>
+                                <input
+                                    name="name"
+                                    id="name"
+                                    type="text"
+                                    placeholder="Enter patient's full name"
+                                    autocomplete="name"
+                                    required
+                                >
+                            </label>
+
+                            <label class="field">
+                                <span class="field-label">Age <span class="required">*</span></span>
+                                <input
+                                    name="age"
+                                    id="age"
+                                    type="number"
+                                    min="0"
+                                    placeholder="Age"
+                                    required
+                                >
+                            </label>
+
+                            <label class="field">
+                                <span class="field-label">Gender</span>
+                                <select name="gender" id="gender">
+                                    <option value="">Prefer not to say</option>
+                                    <option>Female</option>
+                                    <option>Male</option>
+                                    <option>Other</option>
+                                </select>
+                            </label>
+
+                            <label class="field">
+                                <span class="field-label">Phone</span>
+                                <input
+                                    name="phone"
+                                    id="phone"
+                                    type="tel"
+                                    placeholder="Phone number"
+                                    autocomplete="tel"
+                                >
+                            </label>
+
+                            <label class="field field-full">
+                                <span class="field-label">Address</span>
+                                <input
+                                    name="address"
+                                    id="address"
+                                    type="text"
+                                    placeholder="Patient address"
+                                    autocomplete="street-address"
+                                >
+                            </label>
+
+                            <label class="field field-full">
+                                <span class="field-label">
+                                    Symptoms
+                                    <span class="required">*</span>
+                                </span>
+                                <span class="field-hint">
+                                    Describe the main symptoms, severity, duration, and any important details.
+                                </span>
+                                <textarea
+                                    name="symptoms"
+                                    id="symptoms"
+                                    rows="6"
+                                    placeholder="Example: Sudden chest tightness, sweating and pain radiating to the left arm..."
+                                    required
+                                ></textarea>
+                            </label>
+                        </div>
+
+                        <div class="ai-status" id="llmStatus">
+                            <div class="ai-status-icon" aria-hidden="true">✦</div>
+                            <div>
+                                <strong>AI status: idle</strong>
+                                <span>Ready to analyze the patient's symptoms.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button id="btnSubmit" type="submit" class="btn btn-primary">
+                                <span>Submit &amp; triage</span>
+                                <span class="btn-arrow" aria-hidden="true">→</span>
+                            </button>
+
+                            <button id="btnClear" type="button" class="btn btn-secondary">
+                                Clear form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <aside class="card workflow-card">
+                    <div class="card-header">
+                        <div>
+                            <h3>How it works</h3>
+                            <p>Three simple steps.</p>
+                        </div>
+                    </div>
+
+                    <ol class="workflow">
+                        <li>
+                            <span class="workflow-number">1</span>
+                            <div>
+                                <strong>Enter symptoms</strong>
+                                <p>Provide the patient's basic details and current symptoms.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="workflow-number">2</span>
+                            <div>
+                                <strong>AI-assisted triage</strong>
+                                <p>ClarityRx analyzes the information and suggests urgency and specialty.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="workflow-number">3</span>
+                            <div>
+                                <strong>Review &amp; save</strong>
+                                <p>Review the result and save the completed patient record.</p>
+                            </div>
+                        </li>
+                    </ol>
+
+                    <div class="workflow-note">
+                        <span class="note-icon" aria-hidden="true">i</span>
+                        <p>
+                            ClarityRx provides decision support and does not replace professional medical judgment.
+                        </p>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Manual override -->
+            <div id="override" class="card override-card hidden">
+                <div class="override-header">
+                    <div>
+                        <p class="eyebrow">REVIEW REQUIRED</p>
+                        <h3>Manual override</h3>
+                        <p>Review or correct the AI-assisted triage before saving.</p>
+                    </div>
+                    <span class="review-badge">Needs review</span>
+                </div>
+
+                <div class="form-grid">
+                    <label class="field">
+                        <span class="field-label">Urgency</span>
+                        <select id="overrideUrgency">
+                            <option value="red">Red — Emergency</option>
+                            <option value="yellow">Yellow — Needs review</option>
+                            <option value="green">Green — Routine</option>
+                        </select>
+                    </label>
+
+                    <label class="field">
+                        <span class="field-label">Doctor / Specialty</span>
+                        <input id="overrideDoctor" type="text" placeholder="Recommended specialty">
+                    </label>
+
+                    <label class="field field-full">
+                        <span class="field-label">AI notes</span>
+                        <textarea id="overrideNotes" rows="4" placeholder="Triage rationale"></textarea>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button id="btnSaveManual" type="button" class="btn btn-primary">
+                        Save to Sheet
+                    </button>
+                    <button id="btnCancelManual" type="button" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             Patient Record
+             ===================================================== -->
+        <section id="patientView" class="page-section hidden printable">
+            <div class="record-toolbar">
+                <button id="backFromPatient" class="btn btn-secondary btn-small" type="button">
+                    ← Back
+                </button>
+
+                <button id="btnPrint" class="btn btn-secondary btn-small" type="button">
+                    Print record
+                </button>
+            </div>
+
+            <div id="patientContent"></div>
+        </section>
+
+        <!-- =====================================================
+             Patient Directory
+             ===================================================== -->
+        <section id="listView" class="page-section hidden">
+            <div class="record-toolbar">
+                <button id="backFromList" class="btn btn-secondary btn-small" type="button">
+                    ← Back
+                </button>
+            </div>
+
+            <div class="page-heading compact">
+                <div>
+                    <p class="eyebrow">PATIENT DIRECTORY</p>
+                    <h2>All patients</h2>
+                    <p class="page-description">
+                        Browse previously saved patient triage records.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card table-card">
+                <div class="table-header">
+                    <div>
+                        <h3>Patient records</h3>
+                        <p>Most recent records appear first.</p>
+                    </div>
+                </div>
+
+                <div id="listContainer" class="tablewrap">
+                    <table id="patientsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Urgency</th>
+                                <th>Doctor</th>
+                                <th>Time</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="foot">
+        <span>ClarityRx</span>
+        <span>AI-assisted patient intake &amp; triage</span>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
