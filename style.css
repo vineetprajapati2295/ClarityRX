@@ -1,0 +1,86 @@
+:root{
+  --bg:#f6f7fb;
+  --card:#dcffd7;
+  --muted:#666;
+  --primary:#1b6ef6;
+  --danger:#e94b4b;
+  --yellow:#f1b24a;
+  --green:#2fa84f;
+  --radius:10px;
+  --max-width:880px;
+}
+
+*{box-sizing:border-box}
+body{
+  font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin:0;
+  background:linear-gradient(180deg,#ffffff, #f1faf5);
+  color:#111;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  align-items:center;
+}
+
+.topbar{
+  width:100%;
+  max-width:var(--max-width);
+  margin:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+h1{margin:0;font-size:2rem;}
+main{width:100%;max-width:var(--max-width);padding:0 18px 40px}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:0 6px 18px rgba(20,30,60,0.06);
+  margin-bottom:14px;
+}
+
+.small{padding:6px 10px;font-size:0.9rem}
+.hidden{display:none}
+
+label{display:block;margin:8px 0;font-size:0.95rem}
+input[type="text"],input[type="tel"],input[type="number"],select,textarea{
+  width:100%;
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid #e6e9ef;
+  margin-top:6px;
+  font-size:0.95rem;
+}
+
+.row{display:flex;gap:10px;margin-top:12px}
+.row .btn{flex:0 0 auto}
+.btn{
+  background:transparent;border:1px solid #d0d6e0;padding:8px 12px;border-radius:10px;cursor:pointer;
+}
+.btn.primary{background:var(--primary);color:#fff;border-color:transparent}
+.btn.small{font-size:0.9rem;padding:6px 10px}
+.muted{color:var(--muted);font-size:0.9rem;margin-top:8px}
+
+.pill{
+  display:inline-block;padding:6px 10px;border-radius:999px;color:#fff;font-weight:600;font-size:0.9rem;
+}
+.pill.red{background:var(--danger)}
+.pill.yellow{background:var(--yellow);color:#2b1f00}
+.pill.green{background:var(--green)}
+
+.tablewrap{overflow:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #eef1f6;text-align:left;font-size:0.95rem}
+th{background:transparent;color:var(--muted);font-weight:600}
+
+.printable{max-width:720px;margin:0 auto}
+#patientContent{margin-top:12px}
+
+@media (max-width:600px){
+  .row{flex-direction:column}
+  .topbar{margin:12px}
+  main{padding:0 12px 40px}
+}
+
