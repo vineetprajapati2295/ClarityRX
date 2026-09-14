@@ -196,7 +196,6 @@ function showPatientPage(p){
       <span style="margin-left:12px"><strong>Doctor:</strong> ${escapeHtml(p.doctor||'')}</span>
     </div>
     <div style="margin-top:12px"><strong>AI notes:</strong><div style="margin-top:6px">${escapeHtml(p.ai_notes||'')}</div></div>
-    <details style="margin-top:12px;color:#666"><summary>Raw AI output</summary><pre style="white-space:pre-wrap">${escapeHtml(p.raw||'')}</pre></details>
   `;
 }
 
